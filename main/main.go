@@ -22,7 +22,7 @@ func standardizeSpaces(s string) string {
 	return strings.Join(strings.Fields(s), " ")
 }
 
-func convertToJsonArr(jsonData []byte) {
+func check(jsonData []byte) {
 	var myArr []Item
 	err := json.Unmarshal(jsonData, &myArr)
 	if err != nil {
@@ -31,6 +31,24 @@ func convertToJsonArr(jsonData []byte) {
 	for _, item := range myArr {
 		println(item.ID, item.Text1)
 	}
+}
+
+func convertToJsonArr(jsonData []byte, output string) {
+	//Write JSON data to file
+	jsonFile, err := os.Create(output)
+	if err != nil {
+		fmt.Println("Error creating JSON file:", err)
+		return
+	}
+	defer jsonFile.Close()
+
+	_, err = jsonFile.Write(jsonData)
+	if err != nil {
+		fmt.Println("Error writing JSON data to file:", err)
+		return
+	}
+
+	fmt.Println("Conversion completed. JSON data written to output.json")
 
 }
 
@@ -70,23 +88,8 @@ func run(pathToFile string, output string) {
 		return
 	}
 
-	convertToJsonArr(jsonDataString)
+	convertToJsonArr(jsonDataString, output)
 
-	// Write JSON data to file
-	//jsonFile, err := os.Create(output)
-	//if err != nil {
-	//	fmt.Println("Error creating JSON file:", err)
-	//	return
-	//}
-	//defer jsonFile.Close()
-	//
-	//_, err = jsonFile.Write(jsonDataString)
-	//if err != nil {
-	//	fmt.Println("Error writing JSON data to file:", err)
-	//	return
-	//}
-	//
-	//fmt.Println("Conversion completed. JSON data written to output.json")
 }
 
 func main() {
@@ -94,7 +97,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println("base: " + baseDir)
+	//For testing
+	//TODO: add paths as arguments
 	filePath := fmt.Sprintf("%v/test.csv", baseDir)
 	outPath := fmt.Sprintf("%v/test.json", baseDir)
 	run(filePath, outPath)
