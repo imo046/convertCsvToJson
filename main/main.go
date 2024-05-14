@@ -29,7 +29,7 @@ func check(jsonData []byte) {
 		log.Fatal(err)
 	}
 	for _, item := range myArr {
-		println(item.ID, item.Text1)
+		println(item.ID, item.Text1, item.Text2, item.Text3)
 	}
 }
 
@@ -71,7 +71,7 @@ func run(pathToFile string, output string) {
 
 	// Convert records to JSON
 	var jsonData []map[string]string
-	for _, row := range records {
+	for _, row := range records[1:] {
 		data := make(map[string]string)
 		for i, col := range row {
 			// Assuming the first row contains the header
@@ -93,14 +93,23 @@ func run(pathToFile string, output string) {
 }
 
 func main() {
-	baseDir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run main.go input output")
+		os.Exit(1)
 	}
-	//For testing
-	//TODO: add paths as arguments
-	filePath := fmt.Sprintf("%v/test.csv", baseDir)
-	outPath := fmt.Sprintf("%v/test.json", baseDir)
+	filePath := os.Args[1]
+	_, err := os.Stat(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+
+		}
+	}
+	outPath := os.Args[2]
+
+	if len(outPath) <= 0 {
+		log.Fatal("Output cannot be empty")
+	}
+
 	run(filePath, outPath)
 
 }
