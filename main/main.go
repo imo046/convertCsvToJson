@@ -10,12 +10,10 @@ import (
 )
 
 type Item struct {
-	Duration string `json:"Duration, sec"`
-	ID       string `json:"ID"`
-	Notes    string `json:"Notes"`
-	Text1    string `json:"Text_Session1"`
-	Text2    string `json:"Text_Session2"`
-	Text3    string `json:"Text_Session3"`
+	ID    string `json:"ID"`
+	Text1 string `json:"Text_Session1"`
+	Text2 string `json:"Text_Session2"`
+	Text3 string `json:"Text_Session3"`
 }
 
 func standardizeSpaces(s string) string {
@@ -70,7 +68,8 @@ func run(pathToFile string, output string) {
 	}
 
 	// Convert records to JSON
-	var jsonData []map[string]string
+	jsonData := make(map[string]map[string]string)
+
 	for _, row := range records[1:] {
 		data := make(map[string]string)
 		for i, col := range row {
@@ -78,7 +77,9 @@ func run(pathToFile string, output string) {
 			header := records[0][i]
 			data[header] = standardizeSpaces(col)
 		}
-		jsonData = append(jsonData, data)
+		id := row[0]
+		jsonData[id] = data
+		//jsonData = append(jsonData, data)
 	}
 
 	// Convert JSON data to string
