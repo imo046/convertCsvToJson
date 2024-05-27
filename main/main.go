@@ -55,7 +55,7 @@ func run(pathToFile string, output string) {
 	for _, row := range records[1:] {
 		data := make(map[string]string)
 		for i, col := range row {
-			// Assuming the first row contains the header
+
 			header := records[0][i]
 			data[header] = standardizeSpaces(col)
 		}
