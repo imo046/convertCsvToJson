@@ -9,26 +9,8 @@ import (
 	"strings"
 )
 
-type Item struct {
-	ID    string `json:"ID"`
-	Text1 string `json:"Text_Session1"`
-	Text2 string `json:"Text_Session2"`
-	Text3 string `json:"Text_Session3"`
-}
-
 func standardizeSpaces(s string) string {
 	return strings.Join(strings.Fields(s), " ")
-}
-
-func check(jsonData []byte) {
-	var myArr []Item
-	err := json.Unmarshal(jsonData, &myArr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, item := range myArr {
-		println(item.ID, item.Text1, item.Text2, item.Text3)
-	}
 }
 
 func convertToJsonArr(jsonData []byte, output string) {
@@ -79,7 +61,6 @@ func run(pathToFile string, output string) {
 		}
 		id := row[0]
 		jsonData[id] = data
-		//jsonData = append(jsonData, data)
 	}
 
 	// Convert JSON data to string
@@ -95,7 +76,7 @@ func run(pathToFile string, output string) {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run main.go input output")
+		fmt.Println("Usage: go run ./main input output")
 		os.Exit(1)
 	}
 	filePath := os.Args[1]
